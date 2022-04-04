@@ -1,8 +1,8 @@
 const express = require("express");
-const rentalRoutes = require("./src/rental/routes");
+const rentalRoutes = require("./routes");
 
 const app = express();
-const port = 3000;
+const port = 4808;
 
 app.use(express.json());
 
