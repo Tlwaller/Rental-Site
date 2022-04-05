@@ -1,6 +1,7 @@
 const { json } = require("express");
-const pool = require("./db");
+const pool = require("../db");
 const queries = require("./queries");
+const { getUnits } = require("../unit/queries");
 
 const getParentUnits = (req, res) => {
   pool.query(queries.getParentUnits, (error, results) => {
@@ -11,9 +12,16 @@ const getParentUnits = (req, res) => {
 
 const getParentUnitById = (req, res) => {
   const id = parseInt(req.params.id);
-  pool.query(queries.getParentUnitById, [id], (error, results) => {
+  let listing = { complex: {}, floorPlans: [] };
+  pool.query(queries.getParentUnitById, [id], (error, pResults) => {
     if (error) throw error;
-    res.status(200).json(results.rows);
+    listing.complex = pResults.rows[0];
+
+    pool.query(getUnits, [id], (error, uResults) => {
+      if (error) throw error;
+      uResults.rows.map((e) => listing.floorPlans.push(e));
+      res.status(200).json(listing);
+    });
   });
 };
 

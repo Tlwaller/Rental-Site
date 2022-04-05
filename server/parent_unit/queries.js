@@ -1,8 +1,8 @@
 const getParentUnits = `SELECT * FROM parent_unit;`;
 const getParentUnitById = `SELECT * FROM parent_unit WHERE id = $1;`;
 const addParentUnit = `
-INSERT INTO
-parent_unit (
+  INSERT INTO
+  parent_unit (
     parent_unit_name,
     total_floors,
     number_of_units,
@@ -23,10 +23,9 @@ parent_unit (
     phone,
     rent_range
 )
-VALUES
-($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19);`;
-
-const editParentUnit = `UPDATE parent_unit SET 
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19);`;
+const editParentUnit = `
+  UPDATE parent_unit SET 
     parent_unit_name = $2,
     total_floors = $3,
     number_of_units = $4,

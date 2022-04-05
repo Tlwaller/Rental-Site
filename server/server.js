@@ -10,6 +10,6 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-app.use("/api/v1/rentals", rentalRoutes);
+app.use("/api/v1", rentalRoutes);
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
