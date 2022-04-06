@@ -1,10 +1,10 @@
 const { json } = require("express");
 const pool = require("../db");
-const queries = require("./queries");
-const { getUnits } = require("../unit/queries");
+const parentQueries = require("./queries");
+const unitQueries = require("../unit/queries");
 
 const getParentUnits = (req, res) => {
-  pool.query(queries.getParentUnits, (error, results) => {
+  pool.query(parentQueries.getParentUnits, (error, results) => {
     if (error) throw error;
     res.status(200).json(results.rows);
   });
@@ -13,11 +13,11 @@ const getParentUnits = (req, res) => {
 const getParentUnitById = (req, res) => {
   const id = parseInt(req.params.id);
   let listing = { complex: {}, floorPlans: [] };
-  pool.query(queries.getParentUnitById, [id], (error, pResults) => {
+  pool.query(parentQueries.getParentUnitById, [id], (error, pResults) => {
     if (error) throw error;
     listing.complex = pResults.rows[0];
 
-    pool.query(getUnits, [id], (error, uResults) => {
+    pool.query(unitQueries.getUnits, [id], (error, uResults) => {
       if (error) throw error;
       uResults.rows.map((e) => listing.floorPlans.push(e));
       res.status(200).json(listing);
@@ -26,50 +26,84 @@ const getParentUnitById = (req, res) => {
 };
 
 const addParentUnit = (req, res) => {
+  const { complex, floorPlans } = req.body;
   pool.query(
-    queries.addParentUnit,
+    parentQueries.addParentUnit,
     [
-      req.body.parent_unit_name,
-      req.body.total_floors,
-      req.body.number_of_units,
-      req.body.has_fitness_center,
-      req.body.has_swimming_pool,
-      req.body.has_laundry,
-      req.body.has_wheelchair_accessibility,
-      req.body.has_intercom_facility,
-      req.body.has_power_backup,
-      req.body.has_main_door_security,
-      req.body.has_dog_park,
-      req.body.verified,
-      req.body.lifestyle,
-      req.body.number_of_elevators,
-      req.body.street_name,
-      req.body.city_name,
-      req.body.zip_code,
-      req.body.phone,
-      req.body.rent_range,
+      complex.parent_unit_name,
+      complex.total_floors,
+      complex.number_of_units,
+      complex.has_fitness_center,
+      complex.has_swimming_pool,
+      complex.has_laundry,
+      complex.has_wheelchair_accessibility,
+      complex.has_intercom_facility,
+      complex.has_power_backup,
+      complex.has_main_door_security,
+      complex.has_dog_park,
+      complex.verified,
+      complex.lifestyle,
+      complex.number_of_elevators,
+      complex.street_name,
+      complex.city_name,
+      complex.zip_code,
+      complex.phone,
+      complex.rent_range,
     ],
     (error, results) => {
       if (error) throw error;
-      res.status(201).send("Rental successfully listed.");
     }
   );
+
+  if (floorPlans) {
+    let parentUnitId = 0;
+    pool.query(parentQueries.getNextId, (error, results) => {
+      if (error) throw error;
+      parentUnitId = results.rows[0].id + 1;
+      floorPlans.map((unit) => {
+        pool.query(
+          unitQueries.addUnit,
+          [
+            parentUnitId,
+            unit.unit_heading,
+            unit.unit_type,
+            unit.number_of_bedroom,
+            unit.number_of_bathroom,
+            unit.number_of_balcony,
+            unit.leasing_info_id,
+            unit.date_of_posting,
+            unit.date_available_from,
+            unit.leasor_id,
+            unit.is_active,
+            unit.unit_description,
+            unit.carpet_area,
+            unit.unit_number,
+            unit.unit_floor_number,
+          ],
+          (error, results) => {
+            if (error) throw error;
+          }
+        );
+      });
+    });
+    res.status(201).send("Complex and floorplans successfully created.");
+  } else res.status(201).send("Listing successfully created.");
 };
 
 const editParentUnit = (req, res) => {
   const id = parseInt(req.params.id);
 
-  pool.query(queries.getParentUnitById, [id], (error, results) => {
+  pool.query(parentQueries.getParentUnitById, [id], (error, results) => {
     if (error) throw error;
     if (results.rows.length < 1) {
-      res.send("Rental does not exist in the database");
+      res.send(" does not exist in the database");
     } else {
       let rental = results.rows[0];
       for (let property in rental) {
         if (req.body[property]) rental[property] = req.body[property];
       }
       pool.query(
-        queries.editParentUnit,
+        parentQueries.editParentUnit,
         [
           id,
           rental.parent_unit_name,
@@ -103,13 +137,13 @@ const editParentUnit = (req, res) => {
 
 const deleteParentUnit = (req, res) => {
   const id = parseInt(req.params.id);
-  pool.query(queries.getParentUnitById, [id], (error, results) => {
+  pool.query(parentQueries.getParentUnitById, [id], (error, results) => {
     const noRentalFound = !results.rows.length;
     if (error) throw error;
     if (noRentalFound) {
       res.send("Rental does not exist in the database");
     } else {
-      pool.query(queries.deleteParentUnit, [id], (error, results) => {
+      pool.query(parentQueries.deleteParentUnit, [id], (error, results) => {
         if (error) throw error;
         res.status(200).send("Rental successfully removed");
       });

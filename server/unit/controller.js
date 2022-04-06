@@ -32,7 +32,7 @@ const addUnit = (req, res) => {
     ],
     (error, results) => {
       if (error) throw error;
-      res.status(201).send("Unit successfully added.");
+      res.status(201).send("Unit successfully created.");
     }
   );
 };

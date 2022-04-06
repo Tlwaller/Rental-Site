@@ -47,6 +47,7 @@ const editParentUnit = `
     rent_range = $20
     WHERE id = $1;`;
 const deleteParentUnit = "DELETE FROM parent_unit WHERE id = $1";
+const getNextId = "SELECT id FROM parent_unit ORDER BY id DESC LIMIT 1";
 
 module.exports = {
   getParentUnits,
@@ -54,4 +55,5 @@ module.exports = {
   addParentUnit,
   editParentUnit,
   deleteParentUnit,
+  getNextId,
 };
