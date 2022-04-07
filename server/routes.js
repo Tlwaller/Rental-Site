@@ -3,6 +3,7 @@ const parentUnitController = require("./parent_unit/parentUnitController");
 const parentUnitImageController = require("./parent_unit/parent_unit_image/parentUnitImageController");
 const unitController = require("./unit/unitController");
 const amenitiesController = require("./parent_unit/additional_amenities/amenitiesController");
+const accessibilityController = require("./parent_unit/parent_unit_accessibility/accessibilityController");
 
 const router = Router();
 
@@ -36,6 +37,24 @@ router.post(
 );
 router.put("/parent-units/amenities/:id", amenitiesController.editAmenity);
 router.delete("/parent-units/amenities/:id", amenitiesController.deleteAmenity);
+
+//parent unit accessibility routes
+router.get(
+  "/parent-units/accessibility/:id",
+  accessibilityController.getAccessibilityById
+);
+router.post(
+  "/parent-units/accessibility/:parentUnitId",
+  accessibilityController.addAccessibility
+);
+router.put(
+  "/parent-units/accessibility/:id",
+  accessibilityController.editAccessibility
+);
+router.delete(
+  "/parent-units/accessibility/:id",
+  accessibilityController.deleteAccessibility
+);
 
 //individual unit routes
 router.get("/units/:id", unitController.getUnitById);
