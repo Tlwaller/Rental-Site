@@ -2,6 +2,7 @@ const { Router } = require("express");
 const parentUnitController = require("./parent_unit/parentUnitController");
 const parentUnitImageController = require("./parent_unit/parent_unit_image/parentUnitImageController");
 const unitController = require("./unit/unitController");
+const amenitiesController = require("./parent_unit/additional_amenities/amenitiesController");
 
 const router = Router();
 
@@ -23,6 +24,18 @@ router.delete(
   "/parent-units/images/:id",
   parentUnitImageController.deleteImage
 );
+
+//additional amenity routes
+router.get(
+  "/parent-units/amenities/:parentUnitId",
+  amenitiesController.getAmenities
+);
+router.post(
+  "/parent-units/amenities/:parentUnitId",
+  amenitiesController.addAmenities
+);
+router.put("/parent-units/amenities/:id", amenitiesController.editAmenity);
+router.delete("/parent-units/amenities/:id", amenitiesController.deleteAmenity);
 
 //individual unit routes
 router.get("/units/:id", unitController.getUnitById);
