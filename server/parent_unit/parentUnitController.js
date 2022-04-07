@@ -1,7 +1,6 @@
-const { json } = require("express");
 const pool = require("../db");
-const parentQueries = require("./queries");
-const unitQueries = require("../unit/queries");
+const parentQueries = require("./parentUnitQueries");
+const unitQueries = require("../unit/unitQueries");
 
 const getParentUnits = (req, res) => {
   pool.query(parentQueries.getParentUnits, (error, results) => {

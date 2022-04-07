@@ -1,6 +1,5 @@
-const { json } = require("express");
 const pool = require("../db");
-const queries = require("./queries");
+const queries = require("./unitQueries");
 
 const getUnitById = (req, res) => {
   const id = parseInt(req.params.id);
