@@ -4,6 +4,8 @@ const parentUnitImageController = require("./parent_unit/parent_unit_image/paren
 const amenitiesController = require("./parent_unit/additional_amenities/amenitiesController");
 const accessibilityController = require("./parent_unit/parent_unit_accessibility/accessibilityController");
 
+const leasingInfoController = require("./versatile functions/leasing_info/leasingInfoController");
+
 const unitController = require("./unit/unitController");
 const unitImageController = require("./unit/unit_image/unitImageController");
 
@@ -72,5 +74,19 @@ router.get("/units/images/:unit_id", unitImageController.getImages);
 router.post("/units/images/:unit_id", unitImageController.addImages);
 router.put("/units/images/:id", unitImageController.editImage);
 router.delete("/units/images/:id", unitImageController.deleteImage);
+
+//leasing info routes
+
+//this gets the leasing info of an single leasing i.e. houses
+router.get(
+  "/parent-units/leasing-info/:parent_unit_id",
+  leasingInfoController.getLeasingInfoById
+);
+
+//this gets the leasing info of an individual unit i.e. apartment floorplan
+router.get(
+  "/units/leasing-info/:unit_id",
+  leasingInfoController.getLeasingInfoById
+);
 
 module.exports = router;
