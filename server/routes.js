@@ -18,10 +18,13 @@ router.delete("/parent-units/:id", parentUnitController.deleteParentUnit);
 
 //parent unit image routes
 router.get(
-  "/parent-units/images/:parentUnitId",
+  "/parent-units/images/:parent_unit_id",
   parentUnitImageController.getImages
 );
-router.post("/parent-units/images", parentUnitImageController.addImages);
+router.post(
+  "/parent-units/images/:parent_unit_id",
+  parentUnitImageController.addImages
+);
 router.put("/parent-units/images/:id", parentUnitImageController.editImage);
 router.delete(
   "/parent-units/images/:id",
@@ -65,8 +68,8 @@ router.put("/units/:id", unitController.editUnit);
 router.delete("/units/:id", unitController.deleteUnit);
 
 //unit image routes
-router.get("/units/images/:unitId", unitImageController.getImages);
-router.post("/units/images", unitImageController.addImages);
+router.get("/units/images/:unit_id", unitImageController.getImages);
+router.post("/units/images/:unit_id", unitImageController.addImages);
 router.put("/units/images/:id", unitImageController.editImage);
 router.delete("/units/images/:id", unitImageController.deleteImage);
 

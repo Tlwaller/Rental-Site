@@ -11,59 +11,64 @@ const getParentUnits = (req, res) => {
 
 const getParentUnitById = (req, res) => {
   const id = parseInt(req.params.id);
-  let listing = { complex: {}, floorPlans: [] };
+  let listing = { parent_unit: {}, units: [] };
   pool.query(parentQueries.getParentUnitById, [id], (error, pResults) => {
     if (error) throw error;
-    listing.complex = pResults.rows[0];
+    if (pResults.rows < 1) {
+      res.status(201).send("Listing not found in database");
+    } else {
+      listing.parent_unit = pResults.rows[0];
 
-    pool.query(unitQueries.getUnits, [id], (error, uResults) => {
-      if (error) throw error;
-      uResults.rows.map((e) => listing.floorPlans.push(e));
-      res.status(200).json(listing);
-    });
+      pool.query(unitQueries.getUnits, [id], (error, uResults) => {
+        if (error) throw error;
+        uResults.rows.map((e) => listing.units.push(e));
+        res.status(201).send(listing);
+      });
+    }
   });
 };
 
 const addParentUnit = (req, res) => {
-  const { complex, floorPlans } = req.body;
-  pool.query(
-    parentQueries.addParentUnit,
-    [
-      complex.parent_unit_name,
-      complex.total_floors,
-      complex.number_of_units,
-      complex.has_fitness_center,
-      complex.has_swimming_pool,
-      complex.has_laundry,
-      complex.has_wheelchair_accessibility,
-      complex.has_intercom_facility,
-      complex.has_power_backup,
-      complex.has_main_door_security,
-      complex.has_dog_park,
-      complex.verified,
-      complex.lifestyle,
-      complex.number_of_elevators,
-      complex.street_name,
-      complex.city_name,
-      complex.zip_code,
-      complex.phone,
-      complex.rent_range,
-    ],
-    (error, results) => {
-      if (error) throw error;
-    }
-  );
+  const { parent_unit, units } = req.body;
+  const addParentFirst = (cb) => {
+    pool.query(
+      parentQueries.addParentUnit,
+      [
+        parent_unit.parent_unit_name,
+        parent_unit.total_floors,
+        parent_unit.number_of_units,
+        parent_unit.has_fitness_center,
+        parent_unit.has_swimming_pool,
+        parent_unit.has_laundry,
+        parent_unit.has_wheelchair_accessibility,
+        parent_unit.has_intercom_facility,
+        parent_unit.has_power_backup,
+        parent_unit.has_main_door_security,
+        parent_unit.has_dog_park,
+        parent_unit.verified,
+        parent_unit.lifestyle,
+        parent_unit.number_of_elevators,
+        parent_unit.street_name,
+        parent_unit.city_name,
+        parent_unit.zip_code,
+        parent_unit.phone,
+        parent_unit.rent_range,
+      ],
+      (error, results) => {
+        if (error) throw error;
+        const parent_unit_id = results.rows[0].id;
+        cb(parent_unit_id);
+      }
+    );
+  };
 
-  if (floorPlans) {
-    let parentUnitId = 0;
-    pool.query(parentQueries.getNextId, (error, results) => {
-      if (error) throw error;
-      parentUnitId = results.rows[0].id + 1;
-      floorPlans.map((unit) => {
+  addParentFirst((parent_unit_id) => {
+    if (units) {
+      units.map((unit) => {
         pool.query(
           unitQueries.addUnit,
           [
-            parentUnitId,
+            parent_unit_id,
             unit.unit_heading,
             unit.unit_type,
             unit.number_of_bedroom,
@@ -84,9 +89,9 @@ const addParentUnit = (req, res) => {
           }
         );
       });
-    });
-    res.status(201).send("Complex and floorplans successfully created.");
-  } else res.status(201).send("Listing successfully created.");
+      res.status(201).send("Parent unit and units successfully created.");
+    } else res.status(201).send("Listing successfully created.");
+  });
 };
 
 const editParentUnit = (req, res) => {

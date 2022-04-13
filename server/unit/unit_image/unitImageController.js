@@ -10,7 +10,8 @@ const getImages = (req, res) => {
 };
 
 const addImages = (req, res) => {
-  const { unit_id, images } = req.body;
+  const { unit_id } = req.params;
+  const { images } = req.body;
 
   pool.query(unitQueries.getUnitById, [unit_id], (error, results) => {
     if (error) throw error;

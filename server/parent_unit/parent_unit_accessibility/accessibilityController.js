@@ -1,13 +1,6 @@
 const pool = require("../../db");
 const queries = require("./accessibilityQueries");
 
-// const getAccessibilities = (req, res) => {
-//   pool.query(queries.getAccessibility, (error, results) => {
-//     if (error) throw error;
-//     res.status(201).send(results.rows);
-//   });
-// }; //for a future search functionallity
-
 const getAccessibilityById = (req, res) => {
   pool.query(
     queries.getAccessibilityById,
