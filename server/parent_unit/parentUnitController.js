@@ -1,6 +1,7 @@
 const pool = require("../db");
 const parentQueries = require("./parentUnitQueries");
 const unitQueries = require("../unit/unitQueries");
+const leasingInfoQueries = require("../versatile functions/leasing_info/leasingInfoQueries");
 
 const getParentUnits = (req, res) => {
   pool.query(parentQueries.getParentUnits, (error, results) => {
@@ -15,7 +16,7 @@ const getParentUnitById = (req, res) => {
   pool.query(parentQueries.getParentUnitById, [id], (error, pResults) => {
     if (error) throw error;
     if (pResults.rows < 1) {
-      res.status(201).send("Listing not found in database");
+      res.status(201).send("Listing not found in database.");
     } else {
       listing.parent_unit = pResults.rows[0];
 
@@ -29,7 +30,7 @@ const getParentUnitById = (req, res) => {
 };
 
 const addParentUnit = (req, res) => {
-  const { parent_unit, units } = req.body;
+  const { parent_unit, units, leasing_info } = req.body;
   const addParentFirst = (cb) => {
     pool.query(
       parentQueries.addParentUnit,
@@ -90,7 +91,24 @@ const addParentUnit = (req, res) => {
         );
       });
       res.status(201).send("Parent unit and units successfully created.");
-    } else res.status(201).send("Listing successfully created.");
+    } else if (leasing_info) {
+      pool.query(leasingInfoQueries.addParentUnitLeasingInfo, [
+        parent_unit_id,
+        leasing_info.leasing_type,
+        leasing_info.is_sub_leasing_allowed,
+        leasing_info.admin_fee,
+        leasing_info.brokerage_fee,
+        leasing_info.security_deposit,
+        leasing_info.rent_for_short_term_leasing,
+        leasing_info.rent_for_long_term_leasing,
+        leasing_info.is_lease_termination_allowed,
+        leasing_info.lease_termination_amount,
+      ]);
+      res.status(201).send("Listing successfully created.");
+    } else
+      res
+        .status(201)
+        .send("Please provide child units or leasing info for this listing.");
   });
 };
 
@@ -100,7 +118,7 @@ const editParentUnit = (req, res) => {
   pool.query(parentQueries.getParentUnitById, [id], (error, results) => {
     if (error) throw error;
     if (results.rows.length < 1) {
-      res.send(" does not exist in the database");
+      res.send("Listing does not exist in the database.");
     } else {
       let rental = results.rows[0];
       for (let property in rental) {
@@ -132,7 +150,7 @@ const editParentUnit = (req, res) => {
         ],
         (error, results) => {
           if (error) throw error;
-          res.status(201).send("Rental successfully updated");
+          res.status(201).send("Rental successfully updated.");
         }
       );
     }
@@ -145,11 +163,11 @@ const deleteParentUnit = (req, res) => {
     const noRentalFound = !results.rows.length;
     if (error) throw error;
     if (noRentalFound) {
-      res.send("Rental does not exist in the database");
+      res.send("Rental does not exist in the database.");
     } else {
       pool.query(parentQueries.deleteParentUnit, [id], (error, results) => {
         if (error) throw error;
-        res.status(200).send("Rental successfully removed");
+        res.status(200).send("Rental successfully removed.");
       });
     }
   });

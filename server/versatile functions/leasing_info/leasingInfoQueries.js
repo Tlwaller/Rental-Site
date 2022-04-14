@@ -1,7 +1,37 @@
 const getParentUnitLeasingInfo = `SELECT * FROM parent_unit_leasing_info WHERE parent_unit_id = $1`;
 const getUnitLeasingInfo = `SELECT * FROM unit_leasing_info WHERE unit_id = $1`;
+const addParentUnitLeasingInfo = `
+  INSERT INTO parent_unit_leasing_info (
+    parent_unit_id,
+    leasing_type,
+    is_sub_leasing_allowed,
+    admin_fee,
+    brokerage_fee,
+    security_deposit,
+    rent_for_short_term_leasing,
+    rent_for_long_term_leasing,
+    is_lease_termination_allowed,
+    lease_termination_amount
+  ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+`;
+const addUnitLeasingInfo = `
+  INSERT INTO parent_unit_leasing_info (
+    unit_id,
+    leasing_type,
+    is_sub_leasing_allowed,
+    admin_fee,
+    brokerage_fee,
+    security_deposit,
+    rent_for_short_term_leasing,
+    rent_for_long_term_leasing,
+    is_lease_termination_allowed,
+    lease_termination_amount
+  ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+`;
 
 module.exports = {
   getParentUnitLeasingInfo,
   getUnitLeasingInfo,
+  addParentUnitLeasingInfo,
+  addUnitLeasingInfo,
 };
