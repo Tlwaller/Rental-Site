@@ -18,14 +18,14 @@ const addAccessibility = (req, res) => {
   const { params, body } = req;
   pool.query(
     queries.checkForExistingAccessibility,
-    [params.parentUnitId],
+    [params.parent_unit_id],
     (error, results) => {
       if (error) throw error;
       if (results.rows < 1) {
         pool.query(
           queries.addAccessibility,
           [
-            params.parentUnitId,
+            params.parent_unit_id,
             body.school,
             body.childrenPark,
             body.bank,

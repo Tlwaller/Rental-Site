@@ -35,11 +35,11 @@ router.delete(
 
 //additional amenity routes
 router.get(
-  "/parent-units/amenities/:parentUnitId",
+  "/parent-units/amenities/:parent_unit_id",
   amenitiesController.getAmenities
 );
 router.post(
-  "/parent-units/amenities/:parentUnitId",
+  "/parent-units/amenities/:parent_unit_id",
   amenitiesController.addAmenities
 );
 router.put("/parent-units/amenities/:id", amenitiesController.editAmenity);
@@ -51,7 +51,7 @@ router.get(
   accessibilityController.getAccessibilityById
 );
 router.post(
-  "/parent-units/accessibility/:parentUnitId",
+  "/parent-units/accessibility/:parent_unit_id",
   accessibilityController.addAccessibility
 );
 router.put(

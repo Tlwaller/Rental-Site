@@ -4,7 +4,7 @@ const queries = require("./amenitiesQueries");
 const getAmenities = (req, res) => {
   pool.query(
     queries.getAmenities,
-    [req.params.parentUnitId],
+    [req.params.parent_unit_id],
     (error, results) => {
       if (results.rows < 1) {
         res.status(201).send("No additional amenities found");
@@ -20,8 +20,8 @@ const addAmenities = (req, res) => {
 
   req.body.map((e, i) => {
     if (i + 1 == req.body.length) {
-      amenitiesString += `('${req.params.parentUnitId}', '${e}')`;
-    } else amenitiesString += `('${req.params.parentUnitId}', '${e}'), `;
+      amenitiesString += `('${req.params.parent_unit_id}', '${e}')`;
+    } else amenitiesString += `('${req.params.parent_unit_id}', '${e}'), `;
   });
 
   pool.query(
