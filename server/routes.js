@@ -5,6 +5,7 @@ const amenitiesController = require("./parent_unit/additional_amenities/amenitie
 const accessibilityController = require("./parent_unit/parent_unit_accessibility/accessibilityController");
 
 const leasingInfoController = require("./versatile functions/leasing_info/leasingInfoController");
+const imagesController = require("./versatile functions/images/imagesController");
 
 const unitController = require("./unit/unitController");
 const unitImageController = require("./unit/unit_image/unitImageController");
@@ -19,18 +20,15 @@ router.put("/parent-units/:id", parentUnitController.editParentUnit);
 router.delete("/parent-units/:id", parentUnitController.deleteParentUnit);
 
 //parent unit image routes
-router.get(
-  "/parent-units/images/:parent_unit_id",
-  parentUnitImageController.getImages
+router.get("/parent-units/images/:parent_unit_id", imagesController.getImages);
+router.post("/parent-units/images/:parent_unit_id", imagesController.addImages);
+router.put(
+  "/parent-units/images/:parent_unit_id/:image_id",
+  imagesController.editImage
 );
-router.post(
-  "/parent-units/images/:parent_unit_id",
-  parentUnitImageController.addImages
-);
-router.put("/parent-units/images/:id", parentUnitImageController.editImage);
 router.delete(
-  "/parent-units/images/:id",
-  parentUnitImageController.deleteImage
+  "/parent-units/images/:parent_unit_id/:image_id",
+  imagesController.deleteImage
 );
 
 //additional amenity routes
@@ -70,14 +68,14 @@ router.put("/units/:id", unitController.editUnit);
 router.delete("/units/:id", unitController.deleteUnit);
 
 //unit image routes
-router.get("/units/images/:unit_id", unitImageController.getImages);
-router.post("/units/images/:unit_id", unitImageController.addImages);
-router.put("/units/images/:id", unitImageController.editImage);
-router.delete("/units/images/:id", unitImageController.deleteImage);
+router.get("/units/images/:unit_id", imagesController.getImages);
+router.post("/units/images/:unit_id", imagesController.addImages);
+router.put("/units/images/:unit_id/:image_id", imagesController.editImage);
+router.delete("/units/images/:unit_id/:image_id", imagesController.deleteImage);
 
 //leasing info routes
 
-//this gets the leasing info of an single leasing i.e. houses
+//this gets the leasing info of a single leasing i.e. houses
 router.get(
   "/parent-units/leasing-info/:parent_unit_id",
   leasingInfoController.getLeasingInfoById
