@@ -1,5 +1,6 @@
 const pool = require("../db");
 const queries = require("./unitQueries");
+const leasingInfoQueries = require("../versatile functions/leasing_info/leasingInfoQueries");
 
 const getUnitById = (req, res) => {
   const id = parseInt(req.params.id);
@@ -11,27 +12,38 @@ const getUnitById = (req, res) => {
 
 const addUnit = (req, res) => {
   pool.query(
-    queries.addUnit,
-    [
-      req.body.parent_unit_id,
-      req.body.unit_heading,
-      req.body.unit_type,
-      req.body.number_of_bedroom,
-      req.body.number_of_bathroom,
-      req.body.number_of_balcony,
-      req.body.leasing_info_id,
-      req.body.date_of_posting,
-      req.body.date_available_from,
-      req.body.leasor_id,
-      req.body.is_active,
-      req.body.unit_description,
-      req.body.carpet_area,
-      req.body.unit_number,
-      req.body.unit_floor_number,
-    ],
+    leasingInfoQueries.getParentUnitLeasingInfo,
+    [req.body.parent_unit_id],
     (error, results) => {
       if (error) throw error;
-      res.status(201).send("Unit successfully created.");
+      if (results.rows[0]) {
+        res.status.send("Cannot append children to individual rentals.");
+      } else {
+        pool.query(
+          queries.addUnit,
+          [
+            req.body.parent_unit_id,
+            req.body.unit_heading,
+            req.body.unit_type,
+            req.body.number_of_bedroom,
+            req.body.number_of_bathroom,
+            req.body.number_of_balcony,
+            req.body.leasing_info_id,
+            req.body.date_of_posting,
+            req.body.date_available_from,
+            req.body.leasor_id,
+            req.body.is_active,
+            req.body.unit_description,
+            req.body.carpet_area,
+            req.body.unit_number,
+            req.body.unit_floor_number,
+          ],
+          (error, results) => {
+            if (error) throw error;
+            res.status(201).send("Unit successfully created.");
+          }
+        );
+      }
     }
   );
 };

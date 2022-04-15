@@ -11,22 +11,42 @@ const getParentUnits = (req, res) => {
 };
 
 const getParentUnitById = (req, res) => {
-  const id = parseInt(req.params.id);
   let listing = { parent_unit: {}, units: [] };
-  pool.query(parentQueries.getParentUnitById, [id], (error, pResults) => {
-    if (error) throw error;
-    if (pResults.rows < 1) {
-      res.status(201).send("Listing not found in database.");
-    } else {
-      listing.parent_unit = pResults.rows[0];
+  pool.query(
+    parentQueries.getParentUnitById,
+    [req.params.id],
+    (error, results) => {
+      if (error) throw error;
+      if (results.rows < 1) {
+        res.status(201).send("Listing not found in database.");
+      } else {
+        listing.parent_unit = results.rows[0];
 
-      pool.query(unitQueries.getUnits, [id], (error, uResults) => {
-        if (error) throw error;
-        uResults.rows.map((e) => listing.units.push(e));
-        res.status(201).send(listing);
-      });
+        pool.query(unitQueries.getUnits, [req.params.id], (error, uResults) => {
+          if (error) throw error;
+          uResults.rows.map((e) => listing.units.push(e));
+          if (listing.units.length < 1) {
+            delete listing.units;
+            pool.query(
+              leasingInfoQueries.getParentUnitLeasingInfo,
+              [req.params.id],
+              (error, results) => {
+                if (error) throw error;
+                if (results.rows[0]) {
+                  listing.leasing_info = results.rows[0];
+                  res.status(201).send(listing);
+                } else {
+                  listing.message =
+                    "WARNING: Listing has no leasing info or child units.";
+                  res.status(201).send(listing);
+                }
+              }
+            );
+          } else res.status(201).send(listing);
+        });
+      }
     }
-  });
+  );
 };
 
 const addParentUnit = (req, res) => {
