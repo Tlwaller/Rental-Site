@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const parentUnitController = require("./parent_unit/parentUnitController");
-const parentUnitImageController = require("./parent_unit/parent_unit_image/parentUnitImageController");
 const amenitiesController = require("./parent_unit/additional_amenities/amenitiesController");
 const accessibilityController = require("./parent_unit/parent_unit_accessibility/accessibilityController");
 
@@ -8,7 +7,6 @@ const leasingInfoController = require("./versatile functions/leasing_info/leasin
 const imagesController = require("./versatile functions/images/imagesController");
 
 const unitController = require("./unit/unitController");
-const unitImageController = require("./unit/unit_image/unitImageController");
 
 const router = Router();
 
@@ -20,24 +18,24 @@ router.put("/parent-units/:id", parentUnitController.editParentUnit);
 router.delete("/parent-units/:id", parentUnitController.deleteParentUnit);
 
 //parent unit image routes
-router.get("/parent-units/images/:parent_unit_id", imagesController.getImages);
+router.get("/parent-units/:parent_unit_id/images", imagesController.getImages);
 router.post("/parent-units/images/:parent_unit_id", imagesController.addImages);
 router.put(
-  "/parent-units/images/:parent_unit_id/:image_id",
+  "/parent-units/:parent_unit_id/images/:image_id",
   imagesController.editImage
 );
 router.delete(
-  "/parent-units/images/:parent_unit_id/:image_id",
+  "/parent-units/:parent_unit_id/images/:image_id",
   imagesController.deleteImage
 );
 
 //additional amenity routes
 router.get(
-  "/parent-units/amenities/:parent_unit_id",
+  "/parent-units/:parent_unit_id/amenities",
   amenitiesController.getAmenities
 );
 router.post(
-  "/parent-units/amenities/:parent_unit_id",
+  "/parent-units/:parent_unit_id/amenities",
   amenitiesController.addAmenities
 );
 router.put("/parent-units/amenities/:id", amenitiesController.editAmenity);
@@ -49,7 +47,7 @@ router.get(
   accessibilityController.getAccessibilityById
 );
 router.post(
-  "/parent-units/accessibility/:parent_unit_id",
+  "/parent-units/:parent_unit_id/accessibility",
   accessibilityController.addAccessibility
 );
 router.put(
@@ -68,22 +66,22 @@ router.put("/units/:id", unitController.editUnit);
 router.delete("/units/:id", unitController.deleteUnit);
 
 //unit image routes
-router.get("/units/images/:unit_id", imagesController.getImages);
-router.post("/units/images/:unit_id", imagesController.addImages);
-router.put("/units/images/:unit_id/:image_id", imagesController.editImage);
-router.delete("/units/images/:unit_id/:image_id", imagesController.deleteImage);
+router.get("/units/:unit_id/images", imagesController.getImages);
+router.post("/units/:unit_id/images", imagesController.addImages);
+router.put("/units/:unit_id/images/:image_id", imagesController.editImage);
+router.delete("/units/:unit_id/images/:image_id", imagesController.deleteImage);
 
 //leasing info routes
 
 //this gets the leasing info of a single leasing i.e. houses
 router.get(
-  "/parent-units/leasing-info/:parent_unit_id",
+  "/parent-units/:parent_unit_id/leasing-info",
   leasingInfoController.getLeasingInfoById
 );
 
 //this gets the leasing info of an individual unit i.e. apartment floorplan
 router.get(
-  "/units/leasing-info/:unit_id",
+  "/units/:unit_id/leasing-info",
   leasingInfoController.getLeasingInfoById
 );
 
