@@ -78,11 +78,19 @@ router.get(
   "/parent-units/:parent_unit_id/leasing-info",
   leasingInfoController.getLeasingInfoById
 );
+router.put(
+  "/parent-units/:parent_unit_id/leasing-info",
+  leasingInfoController.editLeasingInfo
+);
 
 //this gets the leasing info of an individual unit i.e. apartment floorplan
 router.get(
   "/units/:unit_id/leasing-info",
   leasingInfoController.getLeasingInfoById
+);
+router.put(
+  "/units/:unit_id/leasing-info",
+  leasingInfoController.editLeasingInfo
 );
 
 module.exports = router;

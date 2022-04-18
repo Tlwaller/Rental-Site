@@ -135,46 +135,50 @@ const addParentUnit = (req, res) => {
 const editParentUnit = (req, res) => {
   const id = parseInt(req.params.id);
 
-  pool.query(parentQueries.getParentUnitById, [id], (error, results) => {
-    if (error) throw error;
-    if (results.rows.length < 1) {
-      res.send("Listing does not exist in the database.");
-    } else {
-      let rental = results.rows[0];
-      for (let property in rental) {
-        if (req.body[property]) rental[property] = req.body[property];
-      }
-      pool.query(
-        parentQueries.editParentUnit,
-        [
-          id,
-          rental.parent_unit_name,
-          rental.total_floors,
-          rental.number_of_units,
-          rental.has_fitness_center,
-          rental.has_swimming_pool,
-          rental.has_laundry,
-          rental.has_wheelchair_accessibility,
-          rental.has_intercom_facility,
-          rental.has_power_backup,
-          rental.has_main_door_security,
-          rental.has_dog_park,
-          rental.verified,
-          rental.lifestyle,
-          rental.number_of_elevators,
-          rental.street_name,
-          rental.city_name,
-          rental.zip_code,
-          rental.phone,
-          rental.rent_range,
-        ],
-        (error, results) => {
-          if (error) throw error;
-          res.status(201).send("Rental successfully updated.");
+  if (isNaN(id)) {
+    res.status(201).send("Provided id is invalid.");
+  } else {
+    pool.query(parentQueries.getParentUnitById, [id], (error, results) => {
+      if (error) throw error;
+      if (results.rows.length < 1) {
+        res.send("Listing does not exist in the database.");
+      } else {
+        let rental = results.rows[0];
+        for (let property in rental) {
+          if (req.body[property]) rental[property] = req.body[property];
         }
-      );
-    }
-  });
+        pool.query(
+          parentQueries.editParentUnit,
+          [
+            id,
+            rental.parent_unit_name,
+            rental.total_floors,
+            rental.number_of_units,
+            rental.has_fitness_center,
+            rental.has_swimming_pool,
+            rental.has_laundry,
+            rental.has_wheelchair_accessibility,
+            rental.has_intercom_facility,
+            rental.has_power_backup,
+            rental.has_main_door_security,
+            rental.has_dog_park,
+            rental.verified,
+            rental.lifestyle,
+            rental.number_of_elevators,
+            rental.street_name,
+            rental.city_name,
+            rental.zip_code,
+            rental.phone,
+            rental.rent_range,
+          ],
+          (error, results) => {
+            if (error) throw error;
+            res.status(201).send("Rental successfully updated.");
+          }
+        );
+      }
+    });
+  }
 };
 
 const deleteParentUnit = (req, res) => {
