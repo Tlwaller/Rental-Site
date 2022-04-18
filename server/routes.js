@@ -7,6 +7,9 @@ const leasingInfoController = require("./versatile functions/leasing_info/leasin
 const imagesController = require("./versatile functions/images/imagesController");
 
 const unitController = require("./unit/unitController");
+const {
+  editParentUnitLeasingInfo,
+} = require("./versatile functions/leasing_info/leasingInfoQueries");
 
 const router = Router();
 
@@ -77,6 +80,10 @@ router.delete("/units/:unit_id/images/:image_id", imagesController.deleteImage);
 router.get(
   "/parent-units/:parent_unit_id/leasing-info",
   leasingInfoController.getLeasingInfoById
+);
+router.put(
+  "/parent-units/:parent_unit_id/leasing-info",
+  leasingInfoController.editLeasingInfo
 );
 
 //this gets the leasing info of an individual unit i.e. apartment floorplan
