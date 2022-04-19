@@ -3,7 +3,10 @@ const queries = require("./unitQueries");
 const leasingInfoQueries = require("../versatile functions/leasing_info/leasingInfoQueries");
 
 const getUnitById = (req, res) => {
-  const id = parseInt(req.params.id);
+  const { id } = req.params;
+  if (isNaN(id)) {
+    return res.status(201).send("Invalid unit id provided.");
+  }
   pool.query(queries.getUnitById, [id], (error, results) => {
     if (error) throw error;
     res.status(200).json(results.rows);
@@ -28,7 +31,6 @@ const addUnit = (req, res) => {
             req.body.number_of_bedroom,
             req.body.number_of_bathroom,
             req.body.number_of_balcony,
-            req.body.leasing_info_id,
             req.body.date_of_posting,
             req.body.date_available_from,
             req.body.leasor_id,
@@ -49,7 +51,11 @@ const addUnit = (req, res) => {
 };
 
 const editUnit = (req, res) => {
-  const id = parseInt(req.params.id);
+  const { id } = req.params;
+
+  if (isNaN(id)) {
+    return res.status(201).send("Invalid unit id provided.");
+  }
 
   pool.query(queries.getUnitById, [id], (error, results) => {
     if (error) throw error;
@@ -90,7 +96,7 @@ const editUnit = (req, res) => {
 };
 
 const deleteUnit = (req, res) => {
-  const id = parseInt(req.params.id);
+  const { id } = req.params;
   pool.query(queries.getUnitById, [id], (error, results) => {
     const noRentalFound = !results.rows.length;
     if (error) throw error;

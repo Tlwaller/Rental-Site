@@ -9,7 +9,6 @@ const addUnit = `
     number_of_bedroom,
     number_of_bathroom,
     number_of_balcony,
-    leasing_info_id,
     date_of_posting,
     date_available_from,
     leasor_id,
@@ -19,7 +18,7 @@ const addUnit = `
     unit_number,
     unit_floor_number
 )
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);`;
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);`;
 const editUnit = `
   UPDATE unit SET 
     parent_unit_id = $2,
