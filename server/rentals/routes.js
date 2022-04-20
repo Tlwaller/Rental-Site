@@ -2,12 +2,11 @@ const { Router } = require("express");
 const parentUnitController = require("./parent_unit/parentUnitController");
 const amenitiesController = require("./parent_unit/additional_amenities/amenitiesController");
 const accessibilityController = require("./parent_unit/parent_unit_accessibility/accessibilityController");
+const unitController = require("./unit/unitController");
 
 const leasingInfoController = require("./versatile functions/leasing_info/leasingInfoController");
 const imagesController = require("./versatile functions/images/imagesController");
 const featuresController = require("./versatile functions/features/featuresController");
-
-const unitController = require("./unit/unitController");
 
 const router = Router();
 

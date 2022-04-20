@@ -1,4 +1,4 @@
-const pool = require("../../db");
+const pool = require("../../../db");
 const format = require("pg-format");
 const queries = require("./featuresQueries");
 

@@ -1,4 +1,4 @@
-const pool = require("../db");
+const pool = require("../../db");
 const queries = require("./unitQueries");
 const leasingInfoQueries = require("../versatile functions/leasing_info/leasingInfoQueries");
 

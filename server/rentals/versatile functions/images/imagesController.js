@@ -1,4 +1,4 @@
-const pool = require("../../db");
+const pool = require("../../../db");
 const queries = require("./imagesQueries");
 const parentUnitQueries = require("../../parent_unit/parentUnitQueries");
 const unitQueries = require("../../unit/unitQueries");

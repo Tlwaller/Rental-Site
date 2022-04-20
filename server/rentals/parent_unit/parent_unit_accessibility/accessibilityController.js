@@ -1,4 +1,4 @@
-const pool = require("../../db");
+const pool = require("../../../db");
 const queries = require("./accessibilityQueries");
 
 const getAccessibilityById = (req, res) => {
@@ -88,7 +88,6 @@ const deleteAccessibility = (req, res) => {
 };
 
 module.exports = {
-  //getAccessibility,
   getAccessibilityById,
   addAccessibility,
   editAccessibility,
