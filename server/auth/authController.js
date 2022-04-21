@@ -59,7 +59,6 @@ const logout = (req, res) => {
 
 const editUserInfo = (req, res) => {
   if (req.session.user) {
-    // return res.status(201).send(req.session.user);
     pool.query(
       queries.getUser,
       [req.session.user.username],

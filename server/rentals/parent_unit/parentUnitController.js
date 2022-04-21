@@ -4,6 +4,7 @@ const unitQueries = require("../unit/unitQueries");
 const leasingInfoQueries = require("../versatile functions/leasing_info/leasingInfoQueries");
 
 const getParentUnits = (req, res) => {
+  if (!req.session.user) return res.status(201).send("Please sign in or register to view this page.");
   pool.query(parentQueries.getParentUnits, (error, results) => {
     if (error) throw error;
     res.status(200).json(results.rows);
