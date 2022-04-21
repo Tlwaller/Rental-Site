@@ -57,9 +57,60 @@ const logout = (req, res) => {
   res.status(201).send("Successfully logged out.");
 };
 
+const editUserInfo = (req, res) => {
+  if (req.session.user) {
+    // return res.status(201).send(req.session.user);
+    pool.query(
+      queries.getUser,
+      [req.session.user.username],
+      (error, results) => {
+        if (error) throw error;
+        if (results.rows[0]) {
+          let newInfo = results.rows[0];
+          for (property in newInfo) {
+            req.body[property] && (newInfo[property] = req.body[property]);
+          }
+          pool.query(
+            queries.editUserInfo,
+            [
+              req.session.user.id,
+              newInfo.user_type,
+              newInfo.first_name,
+              newInfo.last_name,
+              newInfo.address,
+              newInfo.contact_number,
+              newInfo.email_address,
+              newInfo.username,
+              newInfo.password,
+            ],
+            (error, results) => {
+              if (error) throw error;
+              req.session.user = results.rows[0];
+              return res.status(201).send("Successfully updated account.");
+            }
+          );
+        } else res.status(201).send("User not found.");
+      }
+    );
+  } else res.status(201).send("Please sign in to edit your account.");
+};
+
+const deleteUser = (req, res) => {
+  if (req.session.user) {
+    pool.query(queries.deleteUser, [req.session.user.id], (error, results) => {
+      if (error) throw error;
+      req.session.destroy();
+      res.status(201).send("Successfully removed account from database.");
+    });
+  } else
+    res.status(201).send("Please sign in to the account you want to delete.");
+};
+
 module.exports = {
   getUser,
   register,
   login,
   logout,
+  editUserInfo,
+  deleteUser,
 };
