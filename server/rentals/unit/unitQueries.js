@@ -27,15 +27,14 @@ const editUnit = `
     number_of_bedroom = $5,
     number_of_bathroom = $6,
     number_of_balcony = $7,
-    leasing_info_id = $8,
-    date_of_posting = $9,
-    date_available_from = $10,
-    leasor_id = $11,
-    is_active = $12,
-    unit_description = $13,
-    carpet_area = $14,
-    unit_number = $15,
-    unit_floor_number = $16
+    date_of_posting = $8,
+    date_available_from = $9,
+    leasor_id = $10,
+    is_active = $11,
+    unit_description = $12,
+    carpet_area = $13,
+    unit_number = $14,
+    unit_floor_number = $15
     WHERE id = $1;`;
 const deleteUnit = "DELETE FROM unit WHERE id = $1";
 

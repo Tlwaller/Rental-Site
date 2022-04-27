@@ -38,7 +38,6 @@ const editFeature = (req, res) => {
           format(queries.editFeature, unitType, unitType),
           [
             parent_unit_id ? parent_unit_id : unit_id,
-            features.furnishing_type,
             features.num_of_assigned_car_parking,
             features.is_air_conditioning,
             features.has_carpet,

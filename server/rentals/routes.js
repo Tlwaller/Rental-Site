@@ -7,6 +7,7 @@ const unitController = require("./unit/unitController");
 const leasingInfoController = require("./versatile functions/leasing_info/leasingInfoController");
 const imagesController = require("./versatile functions/images/imagesController");
 const featuresController = require("./versatile functions/features/featuresController");
+const favoritesController = require("./versatile functions/favorites/favoritesController");
 
 const router = Router();
 
@@ -113,5 +114,17 @@ router.get(
   featuresController.getListingsByFeature
 );
 router.put("/units/:unit_id/features", featuresController.editFeature);
+
+//favorite routes
+router.get("/favorites", favoritesController.getFavorites);
+
+//favorite parent units
+router.post(
+  "/favorites/parent-units/:parent_unit_id",
+  favoritesController.addFavorite
+);
+
+//favorite units
+router.post("/favorites/units/:unit_id", favoritesController.addFavorite);
 
 module.exports = router;

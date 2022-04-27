@@ -4,6 +4,7 @@ const addParentUnit = `
   INSERT INTO
   parent_unit (
     parent_unit_name,
+    leasor_id,
     total_floors,
     number_of_units,
     has_fitness_center,
@@ -23,7 +24,7 @@ const addParentUnit = `
     phone,
     rent_range
 )
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING id;`;
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20) RETURNING id;`;
 const editParentUnit = `
   UPDATE parent_unit SET 
     parent_unit_name = $2,

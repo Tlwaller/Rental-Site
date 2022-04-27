@@ -4,7 +4,6 @@ const unitQueries = require("../unit/unitQueries");
 const leasingInfoQueries = require("../versatile functions/leasing_info/leasingInfoQueries");
 
 const getParentUnits = (req, res) => {
-  if (!req.session.user) return res.status(201).send("Please sign in or register to view this page.");
   pool.query(parentQueries.getParentUnits, (error, results) => {
     if (error) throw error;
     res.status(200).json(results.rows);
@@ -51,12 +50,16 @@ const getParentUnitById = (req, res) => {
 };
 
 const addParentUnit = (req, res) => {
+  if (!req.session.user) {
+    return res.status(201).send("Please sign in to submit a listing.");
+  }
   const { parent_unit, units, leasing_info } = req.body;
   const addParentFirst = (cb) => {
     pool.query(
       parentQueries.addParentUnit,
       [
         parent_unit.parent_unit_name,
+        req.session.user.id,
         parent_unit.total_floors,
         parent_unit.number_of_units,
         parent_unit.has_fitness_center,
@@ -96,10 +99,9 @@ const addParentUnit = (req, res) => {
             unit.number_of_bedroom,
             unit.number_of_bathroom,
             unit.number_of_balcony,
-            unit.leasing_info_id,
             unit.date_of_posting,
             unit.date_available_from,
-            unit.leasor_id,
+            req.session.user.id,
             unit.is_active,
             unit.unit_description,
             unit.carpet_area,
@@ -134,7 +136,7 @@ const addParentUnit = (req, res) => {
 };
 
 const editParentUnit = (req, res) => {
-  const id = parseInt(req.params.id);
+  const { id } = req.params;
 
   if (isNaN(id)) {
     res.status(201).send("Provided id is invalid.");

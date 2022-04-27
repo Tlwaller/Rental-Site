@@ -76,7 +76,6 @@ const editUnit = (req, res) => {
           listing.number_of_bedroom,
           listing.number_of_bathroom,
           listing.number_of_balcony,
-          listing.leasing_info_id,
           listing.date_of_posting,
           listing.date_available_from,
           listing.leasor_id,

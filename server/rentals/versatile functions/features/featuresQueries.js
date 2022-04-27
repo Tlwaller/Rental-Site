@@ -17,18 +17,17 @@ WHERE uf.%I = 'y';
 
 const editFeature = `
 UPDATE %I_feature SET
-  furnishing_type = $2,
-  num_of_assigned_car_parking = $3,
-  is_air_conditioning = $4,
-  has_carpet = $5,
-  has_hardwood_flooring = $6,
-  is_ceiling_fan_cooling = $7,
-  is_central_heating = $8,
-  has_in_unit_fireplace = $9,
-  has_in_unit_garden = $10,
-  has_in_unit_laundry = $11,
-  has_walkin_closet = $12,
-  are_pets_allowed = $13
+  num_of_assigned_car_parking = $2,
+  is_air_conditioning = $3,
+  has_carpet = $4,
+  has_hardwood_flooring = $5,
+  is_ceiling_fan_cooling = $6,
+  is_central_heating = $7,
+  has_in_unit_fireplace = $8,
+  has_in_unit_garden = $9,
+  has_in_unit_laundry = $10,
+  has_walkin_closet = $11,
+  are_pets_allowed = $12
 WHERE %I_id = $1
 `;
 
