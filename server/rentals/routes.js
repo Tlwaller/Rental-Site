@@ -123,8 +123,13 @@ router.post(
   "/favorites/parent-units/:parent_unit_id",
   favoritesController.addFavorite
 );
+router.delete(
+  "/favorites/parent-units/:parent_unit_id",
+  favoritesController.deleteFavorite
+);
 
 //favorite units
 router.post("/favorites/units/:unit_id", favoritesController.addFavorite);
+router.delete("/favorites/units/:unit_id", favoritesController.deleteFavorite);
 
 module.exports = router;
