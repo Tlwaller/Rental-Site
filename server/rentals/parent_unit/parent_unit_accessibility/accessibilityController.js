@@ -8,8 +8,8 @@ const getAccessibilityById = (req, res) => {
     (error, results) => {
       if (error) throw error;
       if (results.rows[0]) {
-        res.status(201).send(results.rows[0]);
-      } else res.status(201).send("Accessibility not found in the database");
+        res.status(200).send(results.rows[0]);
+      } else res.status(404).send("Accessibility not found in the database");
     }
   );
 };
@@ -40,10 +40,7 @@ const addAccessibility = (req, res) => {
             res.status(201).send("Accessibility successfully added");
           }
         );
-      } else
-        res
-          .status(201)
-          .send("Complex already has accessibilty, please edit instead");
+      } else res.status(409).send("Listing already has accessibilty.");
     }
   );
 };
@@ -73,17 +70,17 @@ const editAccessibility = (req, res) => {
         ],
         (error, results) => {
           if (error) throw error;
-          res.status(201).send("Successfully updated accessibility");
+          res.status(200).send("Successfully updated accessibility");
         }
       );
-    } else res.status(201).send("Accessibility not found in the database");
+    } else res.status(404).send("Accessibility not found in the database");
   });
 };
 
 const deleteAccessibility = (req, res) => {
   pool.query(queries.deleteAccessibility, [req.params.id], (error, results) => {
     if (error) throw error;
-    res.status(201).send("Successfully removed accessibility");
+    res.status(200).send("Successfully removed accessibility");
   });
 };
 

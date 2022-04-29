@@ -5,7 +5,7 @@ const leasingInfoQueries = require("../versatile functions/leasing_info/leasingI
 const getUnitById = (req, res) => {
   const { id } = req.params;
   if (isNaN(id)) {
-    return res.status(201).send("Invalid unit id provided.");
+    return res.status(406).send("Invalid unit id provided.");
   }
   pool.query(queries.getUnitById, [id], (error, results) => {
     if (error) throw error;
@@ -20,7 +20,7 @@ const addUnit = (req, res) => {
     (error, results) => {
       if (error) throw error;
       if (results.rows[0]) {
-        res.status.send("Cannot append children to individual rentals.");
+        res.status(405).send("Cannot append children to individual rentals.");
       } else {
         pool.query(
           queries.addUnit,
@@ -54,13 +54,13 @@ const editUnit = (req, res) => {
   const { id } = req.params;
 
   if (isNaN(id)) {
-    return res.status(201).send("Invalid unit id provided.");
+    return res.status(406).send("Invalid unit id provided.");
   }
 
   pool.query(queries.getUnitById, [id], (error, results) => {
     if (error) throw error;
     if (results.rows.length < 1) {
-      res.send("Unit does not exist in the database");
+      res.status(404).send("Unit does not exist in the database");
     } else {
       let listing = results.rows[0];
       for (let property in listing) {
@@ -87,7 +87,7 @@ const editUnit = (req, res) => {
         ],
         (error, results) => {
           if (error) throw error;
-          res.status(201).send("Unit successfully updated");
+          res.status(200).send("Unit successfully updated");
         }
       );
     }
@@ -100,7 +100,7 @@ const deleteUnit = (req, res) => {
     const noRentalFound = !results.rows.length;
     if (error) throw error;
     if (noRentalFound) {
-      res.send("Unit does not exist in the database");
+      res.status(404).send("Unit does not exist in the database");
     } else {
       pool.query(queries.deleteUnit, [id], (error, results) => {
         if (error) throw error;

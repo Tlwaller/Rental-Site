@@ -14,7 +14,7 @@ const getListingsByFeature = (req, res) => {
   }
   pool.query(sql, [], (error, results) => {
     if (error) throw error;
-    res.status(201).send(results.rows[0]);
+    res.status(200).send(results.rows[0]);
   });
 };
 
@@ -52,7 +52,7 @@ const editFeature = (req, res) => {
           ],
           (error, results) => {
             if (error) throw error;
-            res.status(201).send("Successfully updated feature.");
+            res.status(200).send("Successfully updated feature.");
           }
         );
       }

@@ -10,18 +10,18 @@ const getLeasingInfoById = (req, res) => {
       (error, results) => {
         if (error) throw error;
         if (results.rows.length < 1) {
-          res.status(201).send("parent unit not found in database");
-        } else res.status(201).send(results.rows[0]);
+          res.status(404).send("parent unit not found in database");
+        } else res.status(200).send(results.rows[0]);
       }
     );
   } else if (unit_id) {
     pool.query(queries.getUnitLeasingInfo, [unit_id], (error, results) => {
       if (error) throw error;
       if (results.rows.length < 1) {
-        res.status(201).send("unit not found in database");
-      } else res.status(201).send(results.rows[0]);
+        res.status(404).send("unit not found in database");
+      } else res.status(200).send(results.rows[0]);
     });
-  } else res.status(201).send("no unit or parent unit specified");
+  } else res.status(400).send("no unit or parent unit specified");
 };
 
 const editLeasingInfo = async (req, res) => {
@@ -30,7 +30,7 @@ const editLeasingInfo = async (req, res) => {
   let leasing_info = {};
 
   if (!req.params) {
-    return res.status(201).send("Please specify the leasing to edit.");
+    return res.status(400).send("Please specify the leasing to edit.");
   } else if (parent_unit_id) {
     pool.query(
       queries.getParentUnitLeasingInfo,
@@ -38,7 +38,7 @@ const editLeasingInfo = async (req, res) => {
       (error, results) => {
         if (error) throw error;
         if (!results.rows[0]) {
-          res.status(201).send("Leasing info not found in database.");
+          res.status(404).send("Leasing info not found in database.");
         } else {
           leasing_info = results.rows[0];
           for (let property in leasing_info) {
@@ -61,7 +61,7 @@ const editLeasingInfo = async (req, res) => {
             ],
             (error, results) => {
               if (error) throw error;
-              res.status(201).send("Successfully updated leasing info.");
+              res.status(200).send("Successfully updated leasing info.");
             }
           );
         }
@@ -71,7 +71,7 @@ const editLeasingInfo = async (req, res) => {
     pool.query(queries.getUnitLeasingInfo, [unit_id], (error, results) => {
       if (error) throw error;
       if (!results.rows[0]) {
-        res.status(201).send("Unit leasing info not found in database.");
+        res.status(404).send("Unit leasing info not found in database.");
       } else {
         leasing_info = results.rows[0];
         for (let property in leasing_info) {
@@ -94,7 +94,7 @@ const editLeasingInfo = async (req, res) => {
           ],
           (error, results) => {
             if (error) throw error;
-            res.status(201).send("Successfully updated unit leasing info.");
+            res.status(200).send("Successfully updated unit leasing info.");
           }
         );
       }

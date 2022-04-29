@@ -4,15 +4,15 @@ const bcrypt = require("bcryptjs");
 
 const getUser = (req, res) => {
   req.session.user
-    ? res.status(201).send(req.session.user)
-    : res.status(201).send("Please sign in");
+    ? res.status(200).send(req.session.user)
+    : res.status(401).send("Please sign in");
 };
 
 const register = (req, res) => {
   pool.query(queries.getUser, [req.body.username], (error, results) => {
     if (error) throw error;
     if (results.rows[0]) {
-      return res.status(201).send("That username is taken.");
+      return res.status(409).send("That username is taken.");
     } else {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(req.body.password, salt);
@@ -46,15 +46,15 @@ const login = (req, res) => {
     if (results.rows[0]) {
       if (bcrypt.compareSync(password, results.rows[0].password)) {
         req.session.user = results.rows[0];
-        return res.status(201).send(`Welcome, ${req.session.user.username}!`);
-      } else return res.status(201).send("Username/password incorrect");
-    } else return res.status(201).send("Username/password incorrect");
+        return res.status(200).send(`Welcome, ${req.session.user.username}!`);
+      } else return res.status(401).send("Username/password incorrect");
+    } else return res.status(401).send("Username/password incorrect");
   });
 };
 
 const logout = (req, res) => {
   req.session.destroy();
-  res.status(201).send("Successfully logged out.");
+  res.status(205).send("Successfully logged out.");
 };
 
 const editUserInfo = (req, res) => {
@@ -85,13 +85,13 @@ const editUserInfo = (req, res) => {
             (error, results) => {
               if (error) throw error;
               req.session.user = results.rows[0];
-              return res.status(201).send("Successfully updated account.");
+              return res.status(200).send("Successfully updated account.");
             }
           );
-        } else res.status(201).send("User not found.");
+        } else res.status(404).send("User not found.");
       }
     );
-  } else res.status(201).send("Please sign in to edit your account.");
+  } else res.status(403).send("Please sign in to edit your account.");
 };
 
 const deleteUser = (req, res) => {
@@ -99,10 +99,10 @@ const deleteUser = (req, res) => {
     pool.query(queries.deleteUser, [req.session.user.id], (error, results) => {
       if (error) throw error;
       req.session.destroy();
-      res.status(201).send("Successfully removed account from database.");
+      res.status(200).send("Successfully removed account from database.");
     });
   } else
-    res.status(201).send("Please sign in to the account you want to delete.");
+    res.status(403).send("Please sign in to the account you want to delete.");
 };
 
 module.exports = {

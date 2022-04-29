@@ -12,13 +12,13 @@ const getImages = (req, res) => {
       [parent_unit_id],
       (error, results) => {
         if (error) throw error;
-        res.status(201).send(results.rows);
+        res.status(200).send(results.rows);
       }
     );
   } else if (unit_id) {
     pool.query(queries.getUnitImages, [unit_id], (error, results) => {
       if (error) throw error;
-      res.status(201).send(results.rows);
+      res.status(200).send(results.rows);
     });
   }
 };
@@ -34,7 +34,7 @@ const addImages = (req, res) => {
       (error, results) => {
         if (error) throw error;
         if (results.rows.length < 1) {
-          res.status(201).send("Listing does not exist in the database");
+          res.status(404).send("Listing does not exist in the database");
         } else {
           image_urls.map((image) => {
             pool.query(queries.addParentUnitImages, [parent_unit_id, image]);
@@ -47,7 +47,7 @@ const addImages = (req, res) => {
     pool.query(unitQueries.getUnitById, [unit_id], (error, results) => {
       if (error) throw error;
       if (results.rows.length < 1) {
-        res.status(201).send("Unit does not exist in the database");
+        res.status(404).send("Unit does not exist in the database");
       } else {
         image_urls.map((image) => {
           pool.query(queries.addUnitImages, [unit_id, image]);
@@ -71,7 +71,7 @@ const editImage = (req, res) => {
 
   pool.query(query, [image_id, image_url], (error, results) => {
     if (error) throw error;
-    res.status(201).send("Successfully changed image URL");
+    res.status(200).send("Successfully changed image URL");
   });
 };
 
@@ -86,7 +86,7 @@ const deleteImage = (req, res) => {
   }
   pool.query(query, [image_id], (error, results) => {
     if (error) throw error;
-    res.status(201).send("Successfully removed image from database");
+    res.status(200).send("Successfully removed image from database");
   });
 };
 
