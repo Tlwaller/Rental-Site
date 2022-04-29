@@ -115,21 +115,9 @@ router.get(
 );
 router.put("/units/:unit_id/features", featuresController.editFeature);
 
-//favorite routes
+//favorited rentals routes
 router.get("/favorites", favoritesController.getFavorites);
-
-//favorite parent units
-router.post(
-  "/favorites/parent-units/:parent_unit_id",
-  favoritesController.addFavorite
-);
-router.delete(
-  "/favorites/parent-units/:parent_unit_id",
-  favoritesController.deleteFavorite
-);
-
-//favorite units
-router.post("/favorites/units/:unit_id", favoritesController.addFavorite);
-router.delete("/favorites/units/:unit_id", favoritesController.deleteFavorite);
+router.post("/favorites/:parent_unit_id", favoritesController.addFavorite);
+router.delete("/favorites/:parent_unit_id", favoritesController.deleteFavorite);
 
 module.exports = router;
