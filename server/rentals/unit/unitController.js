@@ -5,7 +5,7 @@ const leasingInfoQueries = require("../versatile functions/leasing_info/leasingI
 const getUnitById = (req, res) => {
   const { id } = req.params;
   if (isNaN(id)) {
-    return res.status(406).send("Invalid unit id provided.");
+    return res.sendStatus(400);
   }
   pool.query(queries.getUnitById, [id], (error, results) => {
     if (error) throw error;

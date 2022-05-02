@@ -97,11 +97,12 @@ router.put("/units/:unit_id/images/:image_id", imagesController.editImage);
 router.delete("/units/:unit_id/images/:image_id", imagesController.deleteImage);
 
 //feature routes
+router.get("/parent-units/filtered", featuresController.getListingsByFeature);
 
 //parent unit features
-router.get(
-  "/parent-units/filtered/:parent_unit_feature",
-  featuresController.getListingsByFeature
+router.post(
+  "/parent-units/:parent_unit_id/features",
+  featuresController.addFeature
 );
 router.put(
   "/parent-units/:parent_unit_id/features",
@@ -109,10 +110,7 @@ router.put(
 );
 
 //unit features
-router.get(
-  "/units/filtered/:unit_feature",
-  featuresController.getListingsByFeature
-);
+router.post("/units/:unit_id/features", featuresController.addFeature);
 router.put("/units/:unit_id/features", featuresController.editFeature);
 
 //favorited rentals routes

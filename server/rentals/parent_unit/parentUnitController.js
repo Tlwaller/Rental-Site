@@ -12,6 +12,9 @@ const getParentUnits = (req, res) => {
 
 const getParentUnitById = (req, res) => {
   let listing = { parent_unit: {}, units: [] };
+  if (isNaN(req.params.id)) {
+    return res.sendStatus(400);
+  }
   pool.query(
     parentQueries.getParentUnitById,
     [req.params.id],
