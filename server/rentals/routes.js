@@ -97,9 +97,12 @@ router.put("/units/:unit_id/images/:image_id", imagesController.editImage);
 router.delete("/units/:unit_id/images/:image_id", imagesController.deleteImage);
 
 //feature routes
-router.get("/parent-units/filtered", featuresController.getListingsByFeature);
 
 //parent unit features
+router.get(
+  "/parent-units/filtered/:feature",
+  featuresController.getListingsByFeature
+);
 router.post(
   "/parent-units/:parent_unit_id/features",
   featuresController.addFeature

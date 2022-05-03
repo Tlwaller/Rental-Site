@@ -3,20 +3,18 @@ const format = require("pg-format");
 const queries = require("./featuresQueries");
 
 const getListingsByFeature = (req, res) => {
-  //both actually need to execute
-  const { parent_unit_feature, unit_feature } = req.params;
-  let sql;
-
-  if (parent_unit_feature) {
-    sql = format(queries.getParentUnitsByFeature, parent_unit_feature);
-  } else if (unit_feature) {
-    sql = format(queries.getUnitsByFeature, unit_feature);
-  } else return res.status(400);
-
-  pool.query(sql, [], (error, results) => {
-    if (error) throw error;
-    res.status(200).send(results.rows[0]);
-  });
+  const { feature } = req.params;
+  pool.query(
+    format(queries.getParentUnitsByFeature, feature, feature),
+    [],
+    (error, results) => {
+      if (error) throw error;
+      return res
+        .status(200)
+        .send(results.rows.map((row) => row.parent_unit_name));
+      // return res.status(200).send(rowsMapped);
+    }
+  );
 };
 
 const addFeature = (req, res) => {

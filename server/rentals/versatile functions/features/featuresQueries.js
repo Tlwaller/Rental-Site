@@ -1,17 +1,16 @@
 const getParentUnitsByFeature = `
+SELECT pu.parent_unit_name
+FROM parent_unit pu
+LEFT JOIN parent_unit_feature puf
+ON puf.parent_unit_id = pu.id
+WHERE puf.%I = 'y'
+UNION
 SELECT parent_unit_name
-FROM parent_unit
-INNER JOIN parent_unit_feature
-ON parent_unit.id = parent_unit_id
-WHERE parent_unit_feature.%I = 'y';
-`;
-
-const getUnitsByFeature = `
-SELECT
-  parent_unit_name
-FROM parent_unit par
-  INNER JOIN unit un ON un.parent_unit_id = par.id
-  INNER JOIN unit_feature uf ON uf.unit_id = un.id
+FROM parent_unit pu
+LEFT JOIN unit u
+ON u.parent_unit_id = pu.id
+LEFT JOIN unit_feature uf
+ON uf.unit_id = u.id
 WHERE uf.%I = 'y';
 `;
 
@@ -81,7 +80,6 @@ WHERE unit_id = $1;
 
 module.exports = {
   getParentUnitsByFeature,
-  getUnitsByFeature,
   checkFeature,
   addParentUnitFeature,
   addUnitFeature,
